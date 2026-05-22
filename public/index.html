@@ -11,7 +11,9 @@
     list-style: none;
     padding: 0;
   }
+  
   </style>
+
   <form id="form">
     <input id="input" autocomplete="off" />
     <button>送信</button>
@@ -20,6 +22,14 @@
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
+
+    // URL のパスから部屋名を取得
+    const room = window.location.pathname.replace("/", "");
+    console.log("room:", room); // デバッグ用
+
+    // 部屋に参加
+    socket.emit("joinRoom", room);
+
     const form = document.getElementById("form");
     const input = document.getElementById("input");
     const messages = document.getElementById("messages");
@@ -35,7 +45,8 @@
     socket.on("chat message", (msg) => {
       const li = document.createElement("li");
       li.textContent = msg;
-      messages.appendChild(li);
+      messages.prepend(li);
+    
     });
   </script>
 </body>
